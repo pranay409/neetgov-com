@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://neetgov.com/sitemap.xml
