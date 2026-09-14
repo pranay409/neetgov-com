@@ -1,7 +1,10 @@
 import anthropic
 import os
 import json
+import random
 from datetime import datetime
+
+AUTHORS = ["Ananya Sharma", "Rohan Verma", "Priya Nair", "Arjun Mehta", "Sneha Iyer", "Karan Malhotra", "Divya Reddy", "Aditya Joshi"]
 
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
@@ -31,6 +34,7 @@ topics = [
 today = datetime.now().strftime("%Y-%m-%d")
 topic_index = datetime.now().timetuple().tm_yday % len(topics)
 topic = topics[topic_index]
+author = random.choice(AUTHORS)
 
 prompt = f"""Write a detailed, helpful article for a website called NEETGov.com which helps students prepare for NEET and get into government medical colleges. The article is about: {topic}
 
@@ -48,12 +52,11 @@ Requirements:
 
 <article>
 <h1>[Article Title]</h1>
-<p class="article-meta">Published on {today} | NEETGov Team</p>
 [article body paragraphs using <p>, <h2>, <h3>, <ul>, <ol> tags as appropriate]
 <div class="coaching-highlight">
 <h3>Our Recommended Coaching: Padhle AIM720</h3>
 [2-3 sentences about why Padhle AIM720 is the right choice, mention free demo and refund]
-<a href="https://padhle.com" class="cta-btn">Book Free Demo Class</a>
+<a href="https://neet.padhle.in" class="cta-btn">Book Free Demo Class</a>
 </div>
 </article>"""
 
@@ -77,7 +80,26 @@ page_html = f"""<!DOCTYPE html>
 <title>{topic} | NEETGov</title>
 <meta name="description" content="Expert guidance on {topic} for NEET aspirants targeting government medical colleges.">
 <link rel="canonical" href="https://neetgov.com/{filename}">
-<link rel="stylesheet" href="../style.css">
+<style>
+  body {{ margin: 0; font-family: -apple-system, "Segoe UI", Arial, sans-serif; color: #1a2233; background: #fff; line-height: 1.7; }}
+  .container {{ max-width: 760px; margin: 0 auto; padding: 0 20px; }}
+  .site-header {{ background: #0C1B33; padding: 18px 0; }}
+  .site-header .container {{ display: flex; justify-content: space-between; align-items: center; }}
+  .site-header .logo {{ color: #fff; font-weight: 700; font-size: 1.2rem; text-decoration: none; }}
+  .site-header .logo span {{ color: #E8A020; }}
+  .site-header nav a {{ color: rgba(255,255,255,0.8); text-decoration: none; margin-left: 18px; font-size: 0.92rem; }}
+  .article-page {{ padding: 40px 20px 56px; }}
+  .article-page h1 {{ color: #0C1B33; font-size: 1.8rem; margin-bottom: 6px; }}
+  .article-meta {{ color: #6b7280; font-size: 0.85rem; margin-bottom: 24px; }}
+  .article-page h2 {{ color: #0C1B33; font-size: 1.3rem; margin-top: 32px; }}
+  .article-page h3 {{ color: #1A2F52; font-size: 1.05rem; }}
+  .article-page p, .article-page li {{ color: #333d4f; font-size: 1.02rem; }}
+  .coaching-highlight {{ background: #FFF6E0; border-left: 4px solid #E8A020; padding: 20px 24px; border-radius: 0 10px 10px 0; margin: 32px 0; }}
+  .coaching-highlight h3 {{ margin-top: 0; color: #0C1B33; }}
+  .cta-btn {{ display: inline-block; background: #E8A020; color: #0C1B33; padding: 10px 22px; border-radius: 8px; font-weight: 700; text-decoration: none; margin-top: 10px; }}
+  .site-footer {{ background: #0C1B33; color: rgba(255,255,255,0.75); padding: 24px 0; margin-top: 40px; font-size: 0.88rem; }}
+  .site-footer a {{ color: #E8A020; }}
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -87,12 +109,13 @@ page_html = f"""<!DOCTYPE html>
   </div>
 </header>
 <main class="container article-page">
+<p class="article-meta">By <a href="https://neet.padhle.in" style="color:#E8A020;text-decoration:none;font-weight:600;">{author}</a> &middot; Published on {today}</p>
 {article_html}
 </main>
 <footer class="site-footer">
   <div class="container">
     <p>&copy; 2026 NEETGov.com | For NEET aspirants targeting government seats</p>
-    <p><a href="https://padhle.com">Padhle AIM720 Batch</a> | 15-day refund | Free demo available</p>
+    <p><a href="https://neet.padhle.in">Padhle AIM720 Batch</a> | 15-day refund | Free demo available</p>
   </div>
 </footer>
 </body>
