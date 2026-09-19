@@ -1,8 +1,15 @@
 import anthropic
 import os
+import sys
 import json
 import random
 from datetime import datetime
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+import seo_utils as su
+
+DOMAIN = "neetgov.com"
+SITE_NAME = "NEETGov"
 
 AUTHORS = ["Ananya Sharma", "Rohan Verma", "Priya Nair", "Arjun Mehta", "Sneha Iyer", "Karan Malhotra", "Divya Reddy", "Aditya Joshi"]
 
@@ -122,7 +129,19 @@ page_html = f"""<!DOCTYPE html>
 </html>"""
 
 os.makedirs("articles", exist_ok=True)
+
+url = f"https://{DOMAIN}/{filename}"
+description = su.extract_description(page_html, topic)
+category = su.guess_category(topic)
+
+tagged_html = su.publish_article(
+    article_html=page_html, site_name=SITE_NAME, domain=DOMAIN,
+    canonical_url=url, title=topic, description=description,
+    date_iso=today, category=category,
+)
+
 with open(filename, "w") as f:
-    f.write(page_html)
+    f.write(tagged_html)
 
 print(f"Generated: {filename}")
+print("SEO tags injected, manifest/sitemap/homepage/archive rebuilt")
