@@ -7,6 +7,7 @@ from datetime import datetime
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 import seo_utils as su
+import topic_picker
 
 DOMAIN = "neetgov.com"
 SITE_NAME = "NEETGov"
@@ -39,8 +40,7 @@ topics = [
 ]
 
 today = datetime.now().strftime("%Y-%m-%d")
-topic_index = datetime.now().timetuple().tm_yday % len(topics)
-topic = topics[topic_index]
+topic = topic_picker.pick_topic(topics, SITE_NAME, DOMAIN)
 author = random.choice(AUTHORS)
 
 prompt = f"""Write a detailed, helpful article for a website called NEETGov.com which helps students prepare for NEET and get into government medical colleges. The article is about: {topic}
