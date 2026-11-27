@@ -1,3 +1,4 @@
+import re
 import anthropic
 import os
 import sys
@@ -77,7 +78,7 @@ message = article_guard.create(client,
 article_html = message.content[0].text.strip()
 
 # Build full page
-slug = topic.lower().replace(" ", "-").replace(":", "").replace(",", "")[:60]
+slug = re.sub(r"[^a-z0-9]+", "-", topic.lower()).strip("-")[:60].strip("-")
 filename = f"articles/{today}-{slug}.html"
 
 page_html = f"""<!DOCTYPE html>
